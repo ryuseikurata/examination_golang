@@ -10,20 +10,26 @@ package main
  */
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 	"strconv"
 )
 
+var sc = bufio.NewScanner(os.Stdin)
+
 func main() {
-	lines := []string{"1", "2", "3"}
-	max_value := -20000
-	min_value := 20000
-
-	values, err := intSliceFromStrSlice(lines)
-
-	if err != nil {
-		return
+	// スペースで文字列を区切る
+	sc.Split(bufio.ScanWords)
+	n := nextInt()
+	var values []int
+	for i := 0; i < n; i++ {
+		m := nextInt()
+		values = append(values, m)
 	}
+
+	max_value := values[0]
+	min_value := values[0]
 
 	for _, value := range values {
 		max_value = getMin(max_value, value-min_value)
@@ -55,4 +61,14 @@ func getMin(value_1 int, value_2 int) int {
 	} else {
 		return value_2
 	}
+}
+
+// 文字列を読み込み戻り値をintで返す
+func nextInt() int {
+	sc.Scan()
+	ret, e := strconv.Atoi(sc.Text())
+	if e != nil {
+		panic(e)
+	}
+	return ret
 }
