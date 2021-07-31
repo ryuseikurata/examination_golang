@@ -22,6 +22,7 @@ func main() {
 	// スペースで文字列を区切る
 	sc.Split(bufio.ScanWords)
 	n := nextInt()
+	fmt.Printf("%d", n)
 	var values []int
 	for i := 0; i < n; i++ {
 		m := nextInt()
