@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type Heap []int
 type IHeap interface {
@@ -63,12 +65,11 @@ func min_heapify(heap Heap, i int) Heap {
 	// 最小ノードがiと同じでなかったら変更があるので、smallestとiの値を交換
 	if smallest != i {
 		// 交換処理
-		current_node := heap[i]
-		smallest_node := heap[smallest]
-		heap[i] = smallest_node
-		heap[smallest] = current_node
+		temp := heap[i]
+		heap[i] = heap[smallest]
+		heap[smallest] = temp
 
-		fmt.Printf("%d番目の%dと%d番目の%dが変わって、%dが出た。\n", i, current_node, smallest, smallest_node, heap)
+		fmt.Printf("%d番目の%dと%d番目の%dが変わって、%dが出た。\n", i, temp, smallest, heap[smallest], heap)
 
 		// smallestの場所から再帰処理
 		min_heapify(heap, smallest)
@@ -82,9 +83,42 @@ func build_min_heap(heap Heap) {
 	}
 }
 
+func heap_sort(heapified_array Heap) []int {
+	sorted_array := make([]int, 0, 0)
+	heapified_array = min_heapify(heapified_array, 0)
+	for i := 0; i <= len(heapified_array); i++ {
+		lead := heapified_array[0]
+		last := heapified_array[len(heapified_array)-1]
+		heapified_array[0] = last
+		heapified_array[len(heapified_array)-1] = lead
+
+		sorted_array = append(sorted_array, last)
+		fmt.Printf("%d\n", sorted_array)
+		_, heapified_array, err := delete(heapified_array, len(heapified_array)-1)
+		if err != nil {
+			return []int{0}
+		}
+		build_min_heap(heapified_array)
+	}
+	return sorted_array
+}
+
 func main() {
 	array := []int{4, 5, 6, 3, 2, 1, 9, 12, 8, -1, -2, 1, 4, 10, 5}
 	fmt.Printf("%d\n", array)
-	build_min_heap(array)
-	fmt.Printf("%d\n", array)
+	sorted_array := heap_sort(array)
+	fmt.Printf("%d\n", sorted_array)
+}
+
+func delete(slice []int, i int) (int, []int, error) {
+	ret := slice[i]
+	if len(slice) < i || len(slice) < i {
+		return 0, nil, fmt.Errorf("Error")
+	}
+	ans := make([]int, len(slice))
+	copy(ans, slice)
+
+	ans = append(slice[:i], slice[(i+1):]...)
+
+	return ret, ans, nil
 }
