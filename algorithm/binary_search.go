@@ -9,20 +9,19 @@ type Node struct {
 }
 
 func (n *Node) insert(v int) {
-	for n == nil {
-		if n.value <= v {
-			n.right.insert(v)
+	if v < n.value {
+		if n.left == nil {
+			n.left = &Node{value: v, left: nil, right: nil}
 		} else {
 			n.left.insert(v)
 		}
+	} else {
+		if n.right == nil {
+			n.right = &Node{value: v, left: nil, right: nil}
+		} else {
+			n.right.insert(v)
+		}
 	}
-
-	n = &Node{
-		value: v,
-		left:  nil,
-		right: nil,
-	}
-	return
 }
 
 func main() {
@@ -34,8 +33,8 @@ func main() {
 			value: 19, left: &Node{
 				value: 17, left: nil, right: nil},
 			right: nil}}
-	node.insert(10)
-	fmt.Println(node)
+	node.insert(8)
+	fmt.Println(node.left.left.value)
 }
 
 func (n *Node) search(v int) *int {
