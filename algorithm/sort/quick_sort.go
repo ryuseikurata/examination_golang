@@ -2,48 +2,30 @@ package main
 
 import "fmt"
 
-func getPivot(array []int) int {
-	if array[0] >= array[1] {
-		return array[0]
-	} else {
-		return array[1]
-	}
-}
-
 func quicksort(array []int) []int {
 	if len(array) <= 1 {
 		return array
 	}
 
-	pivot := getPivot(array)
-	array0 := quicksort(getArrayGtPivot(array, pivot))
-	array1 := quicksort(getArrayLtPivot(array, pivot))
+	left := []int{}
+	right := []int{}
 
-	for i := 0; i < len(array0); i++ {
-		array1 = append(array1, array0[i])
-	}
+	pivot := array[0]
 
-	return array1
-}
-
-func getArrayGtPivot(array []int, pivot int) []int {
-	gt_array := []int{}
-	for i := 0; i < len(array); i++ {
-		if array[i] >= pivot {
-			gt_array = append(gt_array, array[i])
+	for _, v := range array[1:] {
+		if v >= pivot {
+			right = append(right, v)
+		} else {
+			left = append(left, v)
 		}
 	}
-	return gt_array
-}
+	right = quicksort(right)
+	left = quicksort(left)
 
-func getArrayLtPivot(array []int, pivot int) []int {
-	lt_array := []int{}
-	for i := 0; i < len(array); i++ {
-		if array[i] < pivot {
-			lt_array = append(lt_array, array[i])
-		}
-	}
-	return lt_array
+	ret := append(left, pivot)
+	ret = append(ret, right...)
+
+	return ret
 }
 
 func main() {
